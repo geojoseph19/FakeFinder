@@ -168,7 +168,7 @@ def scrap(prof_link):
                      'extlink':extlink, 'privateaccount':accstat}
         
     
-    return user_data
+    return user_data, profile_img_url
 
 
 

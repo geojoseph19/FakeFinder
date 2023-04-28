@@ -14,4 +14,11 @@
 //     var a = document.getElementById("t2");
 //     a.style.display = "block";
 
-// } 
+// }                                           src="{% static 'ffmain/js/ffhome.js' %}" type="text/javascript"
+
+var p = "{{ prediction}}";
+
+if(p)
+{
+    alert("Hello, world!");
+}

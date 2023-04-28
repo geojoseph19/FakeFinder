@@ -26,11 +26,14 @@ def convert(userdata):
     #ratio of number of numerical characters in profile name to its length
     ratio_numpname = 0
     pname = str(pname)
-    for char in pname:
-        if char.isdigit():
-            ratio_numpname += 1
+    if len(pname) > 0:
+        for char in pname:
+            if char.isdigit():
+                ratio_numpname += 1
 
-    ratio_numprofilename = ratio_numpname / len(pname)
+        ratio_numprofilename = ratio_numpname / len(pname)
+    else:
+        ratio_numprofilename = 0
 
     #if name==username
     if username == pname:
@@ -44,7 +47,7 @@ def convert(userdata):
 
     test_values = []
     test_values.insert(0, ppic)
-    test_values.insert(1, ratio_numusername)
+    test_values.insert(1, u_ratio)
     test_values.insert(2, pname_count)
     test_values.insert(3, ratio_numprofilename)
     test_values.insert(4, nu)
