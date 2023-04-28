@@ -1,8 +1,10 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+
   <title>FakeFinder</title>
   <link rel="stylesheet" href="{% static 'ffmain/css/index.css' %}">
 </head>
@@ -11,9 +13,44 @@
 <body >
   
 
-<h1>FakeFinder</h1>
 
-  <!--<img src="{% static '/ffmain/images/bg3.jpg' %}" alt=""> -->
+
+  <div class="Wrapper">
+    <!--<h1 class="Title">FakeFinder</h1> -->
+    <div class="title-wrapper">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'ffmain/images/titlelogo.png' %}" class="img" alt="" >
+      </a>
+    </div>
+
+    <div class="Input">
+      <form method="post" action="{% url 'testing' %}">
+      {% csrf_token %}
+      <center><input type="text" id="input" class="Input-text" name="input" placeholder="Enter link here" style="display: inline;">
+      <button type="submit" id="submit" class="button" >Submit</button> </center>
+      </form>
+    </div>
+
+
+    <br><br><center>
+    <div class="textview-wrapper">
+      <div class="textrow-1">
+      <p>Data: {{ optext }}</p>
+
+     <!-- <p>Text 2</p>
+      <p>Text 3</p>
+      <p>Text 4</p>
+      <p>Text 5</p> -->
+     </div>
+    </div>
+  </center>
+
+  
+  </div>
+
+
+
+
 
 
 </body>
