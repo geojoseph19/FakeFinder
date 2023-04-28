@@ -71,6 +71,16 @@ def scrap(prof_link):
         elif flwrs[-1] == "K":
             flwrs = flwrs[0:-1] 
             flwrs = int(flwrs) * 1000
+
+
+        posts = str(posts)
+        if posts[-1] == "M":
+            posts = posts[0:-1] 
+            print(posts)
+            posts = int(posts) * 1000000
+        elif posts[-1] == "K":
+            posts = posts[0:-1] 
+            posts = int(posts) * 1000
             
             
     #---------------Capturing Bio--------------------------------

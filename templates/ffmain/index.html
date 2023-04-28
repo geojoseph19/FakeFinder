@@ -47,7 +47,10 @@
 
     <br><br><center>
         <div id="t1" class="t1" style="display: inline-block; text-align:left; padding-left: 1%; padding-right: 1%; min-height: 310px;" > 
-          <img src="{{ profile_img }}" style="border-radius: 10%;margin-top: 5%;" alt="Profile Picture"> <br>
+          <div style="position: relative;">
+            <img id="dp" src="{{ profile_img }}" style="border-radius: 10%;margin-top: 5%; position: absolute; top: 0; left: 0;" > 
+            <img id="dp2" src="{% static 'ffmain/images/user.jpg' %}" style="border-radius: 10%;margin-top: 5%; height: 100px; " > 
+          </div>
           Username : {{ username }}  <br> Profile name : {{ pname }} <br> Followers : {{flwrs}} <br> 
           Following : {{flwing}} <br> Posts :  {{posts}} <br> </div>
         
@@ -72,14 +75,19 @@
     var p = "{{ prediction}}";
     let optext = document.getElementById("optext");
 
+    let image = document.getElementById("dp");
+
+
     if(p=="y")
     {
       document.getElementById("t3").style.backgroundColor = "rgba(255, 0, 0, 0.214)"; 
       optext.innerText = "This is a fake account!"; 
+      
     }
     else if(p=="n"){
       document.getElementById("t3").style.backgroundColor = "rgba(0, 255, 0, 0.214)";
       optext.innerText = "This is a real account!"; 
+
     }
 
   </script>
