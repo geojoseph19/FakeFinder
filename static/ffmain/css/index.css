@@ -61,15 +61,46 @@ h1 { color: white;
 
 }
 
+
+header {
+  background-image: url("../images/header.png");
+  height: 80px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  float: left;
+  margin: 20px 0 0 20px;
+}
+.logo img {
+  height: 40px;
+}
+
+.homeicon {
+  float: right;
+  margin: 23px 20px 0 20px;
+}
+.homeicon img {
+  height: 40px;
+}
+
+
+
 body {
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   width: 100vw;
+  color: white;
   height: 100vh;
   font-family: var(--fontFamily);
-  font-size: var(--fontSizeMd);
+  font-size: var(--fontSizeLg);
   line-height: var(--lineHeightMd);
   background-image:url("../images/bg3.jpg");
   background-repeat: no-repeat;
@@ -105,7 +136,7 @@ body {
   display: block;
   margin-top: 0;
   padding: var(--inputPaddingV) var(--inputPaddingH);
-  color: inherit;
+  color: black;
   width: 70%;
   font-family: inherit;
   font-size: var(--inputFontSize);
@@ -166,9 +197,10 @@ body {
 
 .textview-wrapper {
 
-  width:30%;
+  width:50%;
   height: 20%;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.214);
+  font-size: var(--inputFontSize);
   border-radius: 10px;
   display: flex;
   justify-content: center;

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-#from sample import tests
+from bs_scrap import scrap
+from dataconverter import convert
 
 # Create your views here.
 def home(request):
@@ -11,6 +12,14 @@ def home(request):
 
 def testing(request):
    if request.method == 'POST':
-      cc = request.POST.get('input')
-      context = {'optext': cc}
+      prof_link = request.POST.get('input')
+      if prof_link[0:26] == "https://www.instagram.com/":
+         username = prof_link[26:-1]
+      else:
+         username = prof_link
+
+      userdata = scrap(username)
+      converteddata = convert(userdata)
+      context = {'userdata': userdata, 'dataset':converteddata}
+      
    return render(request, 'ffmain/index.html', context)
