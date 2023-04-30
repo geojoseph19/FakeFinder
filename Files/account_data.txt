@@ -1,0 +1,14 @@
+https://www.instagram.com/samsung_support2020/
+
+Username : samsung_support2020
+Profile name : SamsungOfficial
+Followers : 38
+Following : 19
+Posts : 1
+ Bio : Watch this video to learn how to get a free Samsung Galaxy S20! https://youtu.be/dQw4w9WgXcQ
+Profile pic : Yes
+External Link : No
+Private Account : No Data : [1, 0.21052631578947367, 1, 0.0, 0, 92, 0, 0, 1, 38, 19]
+Output : y lstm: [[0]]
+This is a fake account!
+

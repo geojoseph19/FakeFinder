@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from bs_scrap import scrap
 from dataconverter import convert
 from rf_model import rf_model
+from lstm_model import lstm_model
+from knn_model import knn_model
 
 # Create your views here.
 def home(request):
@@ -31,14 +33,33 @@ def testing(request):
       extlink = userdata['extlink']
       accstat = userdata['privateaccount']
 
-
       converteddata = convert(userdata)
-      prediction = rf_model(converteddata)
+      rf_pred = rf_model(converteddata)
+      lstm_pred = lstm_model(converteddata)
+      knn_pred = knn_model(converteddata)
 
-      if prediction[0] == 0:
+      #------Finding average-------
+      x = rf_pred[0]
+      y = lstm_pred[0]
+      z = knn_pred[0]
+      # Convert binary to decimal
+      x_dec = int(str(x), 2)
+      y_dec = int(str(y), 2)
+      z_dec = int(str(z), 2)
+
+      # Find average of decimal values
+      avg_dec = int(round((x_dec + y_dec + z_dec) / 3))
+
+      # Convert decimal average to binary
+      avg_bin = bin(avg_dec)[2:]
+
+      # Pad with leading zeros if necessary
+      prediction = avg_bin.zfill(1)
+
+      if prediction == 0:
          prediction ="n"
       else:
-         prediction = "y" 
+         rf_pred = "y" 
       if accstat == 1:
          accstat ="Yes"
       else:
@@ -54,6 +75,6 @@ def testing(request):
    
       context = {'username': username, 'pname':pname, 'flwrs':flwrs, 'flwing':flwing, 'posts':posts, 
                  'bio':bio, 'ppic':ppic, 'extlink':extlink, 'accstat':accstat, 'profile_img':profile_img, 
-                 'dataset':converteddata, 'prediction':prediction }
+                 'dataset':converteddata, 'prediction':prediction, 'lstmpred':lstm_pred, 'knnpred' : knn_pred }
       
    return render(request, 'ffmain/index.html', context)
