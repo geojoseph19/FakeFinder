@@ -1,0 +1,130 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Page description">
+  <meta name="robots" content="index, follow">
+
+  <title>FakeFinder</title>
+  <link rel="stylesheet" href="{% static 'ffmain/css/index.css' %}">
+</head>
+
+
+<body >
+  <header>
+    <div class="logo" id="fflogo">
+        <img src="{% static 'ffmain/images/logoo.png' %}" alt="Logo">
+    </div>
+    <div class="homeicon">
+      <a href="{% url 'home' %}" onclick="pVisibilityOff()">
+      <img src="{% static 'ffmain/images/reload.png' %}" alt="Home Icon">
+    </a>
+    </div>
+    <div class="formicon">
+      <a href="">
+      <img src="{% static 'ffmain/images/form.png' %}" alt="Form Icon">
+    </a>
+    </div>
+
+</header>
+
+
+
+  <div class="Wrapper">
+    <!--<h1 class="Title">FakeFinder</h1> 
+    <div class="title-wrapper">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'ffmain/images/logoo.png' %}" class="img" alt="" >
+      </a>
+    </div> -->
+
+    <div class="Input">
+      <form method="post" action="{% url 'testing' %}">
+      {% csrf_token %}
+      <center><input type="text" id="input" class="Input-text" name="input" placeholder="Enter profile link here" 
+                     style="display: inline;">
+      <button type="submit" id="submit" class="button" onclick="outputs()" >Find</button> </center>
+      </form>
+    </div>
+
+
+    <br><br><center>
+        <div id="t1" class="t1" style="display: inline-block; text-align:left; padding-left: 1%; padding-right: 1%; min-height: 310px;" > 
+          <div style="position: relative;">
+            <img id="dp" src="{{ profile_img }}" style="border-radius: 10%;margin-top: 5%; position: absolute; top: 0; left: 0;" > 
+            <img id="dp2" src="{% static 'ffmain/images/user.jpg' %}" style="border-radius: 10%;margin-top: 5%; height: 100px; " > 
+          </div>
+          Username : {{ username }}  <br> Profile name : {{ pname }} <br> Followers : {{flwrs}} <br> 
+          Following : {{flwing}} <br> Posts :  {{posts}} <br> </div>
+        
+        <div id="t2" class="t2"  style="display: inline-block; text-align:left; padding-left: 1%; padding-right: 1%;vertical-align: top; min-height: 310px; " >
+          Bio : {{ bio }} <br> Profile pic : {{ppic}} <br>
+          External Link : {{extlink}} <br>  Private Account : {{accstat}} </div>
+    
+        <div id="t3" class="t3"  style="display: inline-block; text-align:left; padding-left: 1%; padding-right: 1%;vertical-align: top; min-height: 310px;">
+          Data : {{ dataset }} <br> Output : {{ prediction }} lstm: {{lstmpred}} knn : {{knnpred}} <br> <div id="optext"><div></div>
+  
+    </center>
+
+  
+  </div>
+
+
+
+
+
+  <script >
+
+    var p = "{{ prediction}}";
+    let optext = document.getElementById("optext");
+
+    let image = document.getElementById("dp");
+
+
+    if(p=="y")
+    {
+      document.getElementById("t3").style.backgroundColor = "rgba(255, 0, 0, 0.214)"; 
+      optext.innerText = "This is a fake account!"; 
+      
+    }
+    else if(p=="n"){
+      document.getElementById("t3").style.backgroundColor = "rgba(0, 255, 0, 0.214)";
+      optext.innerText = "This is a real account!"; 
+
+    }
+
+  </script>
+</body>
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -83,10 +83,18 @@ header {
 
 .homeicon {
   float: right;
-  margin: 23px 20px 0 20px;
+  margin: 23px 32px 0 20px;
 }
 .homeicon img {
-  height: 40px;
+  height: 35px;
+}
+.formicon {
+  float: right;
+  margin: 23px 7px 0 20px;
+}
+.formicon img {
+  height: 37px;
+  visibility: visible;
 }
 
 body {

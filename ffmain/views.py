@@ -5,6 +5,7 @@ from dataconverter import convert
 from rf_model import rf_model
 from lstm_model import lstm_model
 from knn_model import knn_model
+import json
 
 # Create your views here.
 def home(request):
@@ -18,10 +19,67 @@ def testing(request):
       prof_link = request.POST.get('input')
       if prof_link[0:26] == "https://www.instagram.com/":
          username = prof_link[26:-1]
+         userdata, profile_img = scrap(username)
+         
+      elif len(prof_link) < 4:
+         return render(request, "ffmain/index.html")
+      
+      elif prof_link[0] == '[':
+         strdata = json.loads(prof_link)
+         x = strdata
+         #x =["pub", "geojoseph19" , "51 posts 2,596 followers 925 following","Geo Joseph",["Unveiling Soon🌀"], 1,1]
+
+         if x[0] == "pub":
+            accstat = 0
+         else:
+            accstat = 1
+         username = x[1]
+         y = x[2]
+         posts = y[0:y.find('posts')]
+         posts = str(posts).replace(",","")
+
+         flwrs = y[y.find('posts')+6:y.find('followers')-1]
+         flwrs = str(flwrs).replace(",","")
+
+         flwing = y[y.find('followers')+10:y.find('following')-1]
+         flwing = str(flwing).replace(",","")
+          
+         #converting number abbrevations 
+         flwrs = str(flwrs)
+         if flwrs[-1] == "M":
+               flwrs = flwrs[0:-1] 
+               print(flwrs)
+               flwrs = int(flwrs) * 1000000
+         elif flwrs[-1] == "K":
+               flwrs = flwrs[0:-1] 
+               flwrs = int(flwrs) * 1000
+
+
+         posts = str(posts)
+         if posts[-1] == "M":
+               posts = posts[0:-1] 
+               print(posts)
+               posts = int(posts) * 1000000
+         elif posts[-1] == "K":
+               posts = posts[0:-1] 
+               posts = int(posts) * 1000
+
+         pname = x[3]
+         bio = x[4][0]
+         ppic = x[5]
+         extlink = x[6]
+
+         userdata = {'username':username, 'profilename':pname, 'followers':flwrs,
+                     'following':flwing, 'posts':posts, 'bio':bio, 'profilepic':ppic, 
+                     'extlink':extlink, 'privateaccount':accstat}
+         profile_img = "null"
+
+
       else:
          username = prof_link
+         userdata, profile_img = scrap(username)
 
-      userdata, profile_img = scrap(username)
+      
 
       username = userdata['username']
       pname = userdata['profilename']
@@ -55,11 +113,12 @@ def testing(request):
 
       # Pad with leading zeros if necessary
       prediction = avg_bin.zfill(1)
+      prediction = int(prediction)
 
       if prediction == 0:
          prediction ="n"
       else:
-         rf_pred = "y" 
+         prediction = "y" 
       if accstat == 1:
          accstat ="Yes"
       else:
@@ -77,4 +136,15 @@ def testing(request):
                  'bio':bio, 'ppic':ppic, 'extlink':extlink, 'accstat':accstat, 'profile_img':profile_img, 
                  'dataset':converteddata, 'prediction':prediction, 'lstmpred':lstm_pred, 'knnpred' : knn_pred }
       
+   return render(request, 'ffmain/index.html', context)
+
+
+def manual(request):
+
+   if request.method == 'POST':
+      context = request.POST.get('input')
+
+
+   
+
    return render(request, 'ffmain/index.html', context)
