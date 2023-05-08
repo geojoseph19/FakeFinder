@@ -1,0 +1,136 @@
+mini chatgpt
+
+
+I'll try to create that. Here is a possible code for making a mini version of chatgpt:
+
+```python
+# Import libraries
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+# Define constants
+MAX_LENGTH = 20 # Maximum number of tokens per response
+BATCH_SIZE = 16 # Number of examples per batch
+EPOCHS = 10 # Number of training epochs
+LR = 0.0001 # Learning rate
+
+# Load tokenizer and model
+tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+model = GPT2LMHeadModel.from_pretrained('gpt2')
+model.to('cuda') # Move model to GPU
+
+# Define optimizer
+optimizer = optim.Adam(model.parameters(), lr=LR)
+
+# Define loss function
+criterion = nn.CrossEntropyLoss()
+
+# Load data
+# Assume data is a list of dialogues, where each dialogue is a list of utterances
+# For example: data = [['Hi', 'Hello', 'How are you?'], ['What is your name?', 'I am Bing', 'Nice to meet you']]
+data = load_data()
+
+# Preprocess data
+# Tokenize and encode the data using the tokenizer
+# Add special tokens for end of text (EOS) and end of utterance (EOU)
+# For example: [[50256, 9221, 50257], [9221, 15496, 50257], [9221, 1715, 389, 50257]] -> ['Hi', 'Hello', 'How are you?']
+data = [[tokenizer.encode(utt + '<|EOU|>') for utt in dial] for dial in data]
+
+# Define a function to generate a response given a context
+def generate_response(context):
+  # Encode the context using the tokenizer
+  context = tokenizer.encode(context)
+  # Add the EOS token to the context
+  context.append(tokenizer.eos_token_id)
+  # Convert the context to a tensor and move it to GPU
+  context = torch.tensor(context).unsqueeze(0).to('cuda')
+  # Generate a response using the model
+  response = model.generate(context, max_length=MAX_LENGTH, do_sample=True, top_p=0.9)
+  # Decode the response using the tokenizer
+  response = tokenizer.decode(response[0])
+  # Remove the context and the EOS token from the response
+  response = response[len(context):-1]
+  # Return the response
+  return response
+
+# Define a function to train the model on one batch of data
+def train_batch(batch):
+  # Initialize the loss to zero
+  loss = 0
+  # Loop through each dialogue in the batch
+  for dial in batch:
+    # Loop through each utterance in the dialogue except the last one
+    for i in range(len(dial) - 1):
+      # Get the input and target utterances
+      input = dial[i]
+      target = dial[i + 1]
+      # Add the EOS token to the input and target utterances
+      input.append(tokenizer.eos_token_id)
+      target.append(tokenizer.eos_token_id)
+      # Convert the input and target utterances to tensors and move them to GPU
+      input = torch.tensor(input).unsqueeze(0).to('cuda')
+      target = torch.tensor(target).unsqueeze(0).to('cuda')
+      # Get the output logits from the model
+      output = model(input)[0]
+      # Compute the loss using the criterion
+      loss += criterion(output.view(-1, output.size(-1)), target.view(-1))
+      # Detach the input from the computation graph to avoid memory issues
+      input.detach()
+  # Backpropagate the loss and update the model parameters using the optimizer
+  loss.backward()
+  optimizer.step()
+  optimizer.zero_grad()
+  # Return the loss value
+  return loss.item()
+
+# Define a function to train the model on the whole data for one epoch
+def train_epoch(data):
+  # Shuffle the data randomly
+  random.shuffle(data)
+  # Initialize the total loss to zero
+  total_loss = 0
+  # Loop through the data with a step size of BATCH_SIZE
+  for i in range(0, len(data), BATCH_SIZE):
+    # Get a batch of data from the current index to the next BATCH_SIZE examples
+    batch = data[i:i + BATCH_SIZE]
+    # Train the model on the batch and get the loss value
+    loss = train_batch(batch)
+    # Add the loss value to the total loss
+
+    total_loss += loss
+    # Print the current progress and loss value
+    print(f'Batch {i // BATCH_SIZE + 1} / {len(data) // BATCH_SIZE}, Loss: {loss:.4f}')
+  # Return the average loss per batch
+  return total_loss / (len(data) // BATCH_SIZE)
+
+# Define a function to evaluate the model on a sample dialogue
+def evaluate(dial):
+  # Print the dialogue
+  print('Dialogue:')
+  for utt in dial:
+    print(utt)
+  # Loop through each utterance in the dialogue except the last one
+  for i in range(len(dial) - 1):
+    # Get the input and target utterances
+    input = dial[i]
+    target = dial[i + 1]
+    # Generate a response using the input utterance
+    response = generate_response(input)
+    # Print the input, target and response utterances
+    print(f'Input: {input}')
+    print(f'Target: {target}')
+    print(f'Response: {response}')
+    print()
+
+# Train the model for EPOCHS epochs
+for epoch in range(EPOCHS):
+  # Train the model on the data and get the average loss per batch
+  avg_loss = train_epoch(data)
+  # Print the epoch number and the average loss
+  print(f'Epoch {epoch + 1}, Average Loss: {avg_loss:.4f}')
+  # Evaluate the model on a sample dialogue
+  evaluate(data[0])
+```
